@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <style>
+
+html,body{
+       width: 100%;
+	   height: 100%;
+}
+
+ body {
+     background: #0d161f;
+}
+
+#circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+	width: 150px;
+    height: 150px;
+}
+
+.loader {
+    width: calc(100% - 0px);
+	height: calc(100% - 0px);
+	border: 8px solid #162534;
+	border-top: 8px solid #09f;
+	border-radius: 50%;
+	animation: rotate 5s linear infinite;
+}
+
+@keyframes rotate {
+100% {transform: rotate(360deg);}
+}
+    </style>
+</head>
+    <body>
+
+
+        <div id="circle">
+          <div class="loader">
+            <div class="loader">
+                <div class="loader">
+                   <div class="loader">
+
+                   </div>
+                </div>
+            </div>
+          </div>
+        </div>
+    <script>
+    var chatSocket = new WebSocket(
+            'ws://' + window.location.host +
+            '/ws/floor/');
+
+        chatSocket.onopen = function (e) {
+            console.log("This is open");
+            chatSocket.send(JSON.stringify({
+                'message': 'want to join a match'
+            }));
+        };
+
+        chatSocket.onmessage = function (e) {
+            console.log("I got a message");
+            var data = JSON.parse(e.data);
+            var message = data['message'];
+            console.log("Now number of message", message);
+            {#chatSocket.close();#}
+            window.location.pathname = 'room/cr/' + message + '/';
+        };
+
+        chatSocket.onclose = function (e) {
+            console.error(e);
+        };
+</script>
+</body>
+</html>
