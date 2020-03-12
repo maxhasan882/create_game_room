@@ -39,8 +39,6 @@ html,body{
     </style>
 </head>
     <body>
-
-
         <div id="circle">
           <div class="loader">
             <div class="loader">
@@ -59,9 +57,11 @@ html,body{
 
         chatSocket.onopen = function (e) {
             console.log("This is open");
-            chatSocket.send(JSON.stringify({
-                'message': 'want to join a match'
-            }));
+            setInterval(function () {
+                chatSocket.send(JSON.stringify({
+                    'message': "Heartbeat from: {{ request.user.username }}",
+                }));
+            }, 500);
         };
 
         chatSocket.onmessage = function (e) {
@@ -70,11 +70,12 @@ html,body{
             var message = data['message'];
             console.log("Now number of message", message);
             {#chatSocket.close();#}
-            window.location.pathname = 'room/cr/' + message + '/';
+{#            window.location.pathname = 'room/cr/' + message + '/';#}
         };
 
         chatSocket.onclose = function (e) {
             console.error(e);
+            window.location.pathname = 'room/landing';
         };
 </script>
 </body>
